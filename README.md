@@ -1,4 +1,4 @@
-# Online DTR Frontend
+# Online-Attendance-with-Automatic-DTR
 
 A modern web application for employee attendance tracking and management. This React-based frontend provides an intuitive interface for employees to record their daily time entries and for administrators to manage employees and monitor attendance records.
 
@@ -37,7 +37,7 @@ A modern web application for employee attendance tracking and management. This R
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd online-dtr-frontend
+cd online-attendance-with-automatic-DTR
 ```
 
 2. Install dependencies:
@@ -142,14 +142,3 @@ The frontend communicates with a PHP backend API. Ensure the backend is running 
 - Modern browsers with camera API support
 - Chrome, Firefox, Edge, Safari (latest versions)
 
-## License
-
-[Add your license here]
-
-## Contributing
-
-[Add contribution guidelines here]
-
-## Support
-
-[Add support information here]
