@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+/* =========================
+   PRINT STYLES – DTR FORM 48 (FINAL)
+   ========================= */
+@media print {
+  /* Minimal reset – keep browser scaling */
+  * {
+    box-shadow: none !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  /* Hide app UI */
+  .no-print,
+  nav,
+  aside,
+  header {
+    display: none !important;
+  }
+
+  /* Print content only */
+  .print-area {
+    display: block !important;
+  }
+
+  /* Page */
+  .print-page {
+    page-break-after: always;
+    width: 100%;
+  }
+
+  /* Two forms per page */
+  .print-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  /* Form container */
+  .dtr-form {
+    width: 48%;
+    border: 1px solid #000;   /* DO NOT increase */
+    padding: 8px;
+    font-size: 11px;          /* SAFE SIZE */
+    box-sizing: border-box;
+  }
+
+  /* Table */
+  .dtr-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 6px;
+  }
+
+  .dtr-table th,
+  .dtr-table td {
+    border: 1px solid #000;   /* SAFE */
+    padding: 2px;             /* SAFE */
+    text-align: center;
+    vertical-align: middle;
+    font-size: 11px;
+  }
+
+  .dtr-table th {
+    font-weight: bold;
+  }
+
+  /* Footer */
+  .dtr-footer {
+    margin-top: 8px;
+    font-size: 10px;
+    text-align: center;
+  }
+
+  /* Paper size */
+  @page {
+    size: letter;   /* OR A4 */
+    margin: 10mm;
+  }
+}
