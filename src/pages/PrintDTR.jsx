@@ -44,7 +44,7 @@ export default function DTRPrint({ records, department }) {
   }
 
   return (
-    <div className="print-area hidden print:block">
+    <div className="hidden print-area print:block">
       {pages.map((pair, pageIndex) => (
         <div key={pageIndex} className="print-page">
           <div className="print-grid">
@@ -69,14 +69,14 @@ export default function DTRPrint({ records, department }) {
 function DTRForm({ employee, department, monthLabel }) {
   return (
     <div className="dtr-form">
-      <h2 className="text-center font-bold">
+      <h2 className="font-bold text-center">
         Civil Service Form No. 48
       </h2>
-      <h3 className="text-center font-bold mb-2">
+      <h3 className="mb-2 font-bold text-center">
         DAILY TIME RECORD
       </h3>
 
-      <div className="text-xs mb-2">
+      <div className="mb-2 text-xs">
         <p>
           Name: <strong>{employee.name}</strong>
         </p>

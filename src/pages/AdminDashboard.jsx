@@ -16,13 +16,13 @@ export default function AdminDashboard() {
         <h1 className="text-2xl font-semibold text-white">
           Admin Dashboard
         </h1>
-        <p className="text-sm text-slate-400 mt-1">
+        <p className="mt-1 text-sm text-slate-400">
           System overview and daily attendance summary
         </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <StatCard
           label="Total Employees"
           value={stats?.totalEmployees ?? "—"}
@@ -44,7 +44,7 @@ export default function AdminDashboard() {
 
 function StatCard({ label, value, color = "text-white" }) {
   return (
-    <div className="rounded-xl bg-white/5 border border-white/10 p-6 backdrop-blur">
+    <div className="p-6 rounded-xl border backdrop-blur bg-white/5 border-white/10">
       <p className="text-sm text-slate-400">{label}</p>
       <p className={`mt-3 text-3xl font-semibold ${color}`}>
         {value}

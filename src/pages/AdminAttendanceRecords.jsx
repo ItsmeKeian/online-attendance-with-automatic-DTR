@@ -147,7 +147,8 @@ export default function AdminAttendanceRecords() {
       </button>
 
       {/* TABLE */}
-      <div className="overflow-hidden rounded-xl border bg-white/5 border-white/10">
+      <div className="overflow-hidden rounded-xl border bg-white/5 border-white/10 no-print">
+
         <table className="w-full text-sm text-slate-300">
           <thead className="bg-white/10">
             <tr>

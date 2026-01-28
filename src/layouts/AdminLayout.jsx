@@ -43,7 +43,7 @@ export default function AdminLayout() {
           <button
             onClick={() => {
               localStorage.clear()
-              window.location.href = "/"
+              window.location.href = "/admin/"
             }}
             className="px-4 py-2 mt-6 w-full text-left text-red-400 rounded-lg hover:bg-red-500/10"
           >
