@@ -1,6 +1,30 @@
-# Online-Attendance-with-Automatic-DTR
+# Digital DTR System — Employee Attendance Management
 
-A modern web application for employee attendance tracking and management. This React-based frontend provides an intuitive interface for employees to record their daily time entries and for administrators to manage employees and monitor attendance records.
+**Modern time tracking with photo verification and automated reporting**
+
+A full-stack web application for managing employee attendance and generating Daily Time Records (DTR). The system consists of two main interfaces: a public employee kiosk where staff can log attendance with photo verification, and an admin dashboard for managing employees and viewing attendance records. Built with React and Tailwind CSS, featuring real-time status updates, automated DTR generation, and comprehensive filtering options.
+
+---
+
+## 📋 Portfolio Summary
+
+**Project Type:** Full-Stack Web Application  
+**Role:** Frontend Developer  
+**Duration:** Personal Project
+
+**Description:**  
+A comprehensive digital attendance management system that replaces manual timekeeping processes. Features include a touch-friendly employee kiosk with camera-based attendance logging, an administrative portal for employee lifecycle management, and automated Daily Time Record generation with advanced filtering and print capabilities.
+
+**Key Highlights:**
+- ✅ Real-time photo verification for attendance logging
+- ✅ Automated DTR generation with date range and department filters
+- ✅ Employee management system with CRUD operations
+- ✅ Role-based authentication and protected routes
+- ✅ Responsive design with modern UI/UX
+
+**Technologies:** React 19, Vite, Tailwind CSS, React Router, PHP REST API, SweetAlert2
+
+---
 
 ## Features
 
