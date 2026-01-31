@@ -10,10 +10,10 @@ A full-stack web application for managing employee attendance and generating Dai
 
 **Project Type:** Full-Stack Web Application  
 **Role:** Frontend Developer  
-**Duration:** Personal Project
+**Engagement:** Client Project 
 
 **Description:**  
-A comprehensive digital attendance management system that replaces manual timekeeping processes. Features include a touch-friendly employee kiosk with camera-based attendance logging, an administrative portal for employee lifecycle management, and automated Daily Time Record generation with advanced filtering and print capabilities.
+A comprehensive digital attendance management system built for a client, replacing manual timekeeping processes. Delivered a touch-friendly employee kiosk with camera-based attendance logging, an administrative portal for employee lifecycle management, and automated Daily Time Record generation with advanced filtering and print capabilities.
 
 **Key Highlights:**
 - ✅ Real-time photo verification for attendance logging
