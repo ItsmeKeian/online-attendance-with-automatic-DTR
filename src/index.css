@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+
 /* =========================
    PRINT STYLES – DTR FORM 48 (FINAL)
    ========================= */

@@ -1,50 +1,59 @@
 import { useEffect, useState, useCallback } from "react"
 import Swal from "sweetalert2"
 import AdminCreateEmployeeModal from "./AdminCreateEmployee"
+import AdminEditEmployeeModal from "./AdminEditEmployee"
+import { getSwalTheme } from "../utils/swalTheme"
 
 const LIMIT = 10
 
 export default function AdminEmployees() {
   const [employees, setEmployees] = useState([])
   const [department, setDepartment] = useState("")
+  const [search, setSearch] = useState("")
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(true)
+
   const [showModal, setShowModal] = useState(false)
+
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [selectedEmployee, setSelectedEmployee] = useState(null)
 
   const totalPages = Math.ceil(total / LIMIT)
 
   /* =====================
      FETCH EMPLOYEES
   ===================== */
-  const fetchEmployees = useCallback(async (currentPage = page) => {
-    setLoading(true)
+  const fetchEmployees = useCallback(
+    async (currentPage = page) => {
+      setLoading(true)
 
-    const params = new URLSearchParams({
-      page: currentPage
-    })
+      const params = new URLSearchParams({
+        page: currentPage,
+      })
 
-    if (department) params.append("department", department)
+      if (department) params.append("department", department)
+      if (search.trim()) params.append("search", search.trim())
 
-    const res = await fetch(
-      `http://localhost/online-dtr-api/admin/employees.php?${params}`
-    )
+      const res = await fetch(
+        `http://localhost/online-dtr-api/admin/employees.php?${params}`
+      )
 
-    const json = await res.json()
+      const json = await res.json()
 
-    setEmployees(json.data || [])
-    setTotal(json.total || 0)
-    setLoading(false)
-  }, [department, page])
+      setEmployees(json.data || [])
+      setTotal(json.total || 0)
+      setLoading(false)
+    },
+    [department, page, search]
+  )
 
   /* =====================
-     RESET PAGE WHEN FILTER CHANGES
+     RESET PAGE WHEN FILTER/SEARCH CHANGES
   ===================== */
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    
     setPage(1)
-  }, [department])
+  }, [department, search])
 
   /* =====================
      LOAD DATA
@@ -57,20 +66,22 @@ export default function AdminEmployees() {
      DELETE EMPLOYEE
   ===================== */
   async function handleDelete(emp) {
+    const theme = getSwalTheme()
+
     const result = await Swal.fire({
       title: "Delete Employee?",
       html: `
         <b>${emp.full_name}</b><br/>
-        <span class="text-xs text-slate-400">${emp.employee_code}</span>
+        <span style="font-size:12px; opacity:0.7;">${emp.employee_code}</span>
       `,
       icon: "warning",
-      background: "#020617",
-      color: "#e5e7eb",
       showCancelButton: true,
-      confirmButtonColor: "#dc2626",
-      cancelButtonColor: "#334155",
       confirmButtonText: "Delete",
-      backdrop: "rgba(2,6,23,0.8)"
+      confirmButtonColor: "#7c3aed",
+      cancelButtonColor: theme.cancelButtonColor,
+      background: theme.background,
+      color: theme.color,
+      backdrop: theme.backdrop,
     })
 
     if (!result.isConfirmed) return
@@ -78,55 +89,108 @@ export default function AdminEmployees() {
     await fetch("http://localhost/online-dtr-api/admin/delete_employee.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: emp.id })
+      body: JSON.stringify({ id: emp.id }),
     })
 
-    Swal.fire({
+    await Swal.fire({
       icon: "success",
       title: "Employee deleted",
-      background: "#020617",
-      color: "#e5e7eb",
-      confirmButtonColor: "#7c3aed"
+      background: theme.background,
+      color: theme.color,
+      confirmButtonColor: theme.confirmButtonColor,
+      backdrop: theme.backdrop,
     })
 
     fetchEmployees(page)
   }
 
   /* =====================
-     UI
+     EDIT EMPLOYEE
   ===================== */
+  function handleEdit(emp) {
+    setSelectedEmployee(emp)
+    setShowEditModal(true)
+  }
+
+  /* =====================
+     EXPORT EMPLOYEES
+  ===================== */
+  function handleExport() {
+    const params = new URLSearchParams()
+
+    if (department) params.append("department", department)
+    if (search.trim()) params.append("search", search.trim())
+
+    const url = `http://localhost/online-dtr-api/admin/export_employees.php?${params}`
+
+    const link = document.createElement("a")
+    link.href = url
+    link.download = "employees_export.csv"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <div>
       {/* HEADER */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold text-white">Employees</h1>
-        <button
-          onClick={() => setShowModal(true)}
-          className="px-4 py-2 text-white bg-purple-600 rounded-lg hover:bg-purple-700"
-        >
-          Create Employee
-        </button>
-      </div>
+      <div className="flex flex-col gap-4 mb-6 md:flex-row md:items-start md:justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
+            Employees Records
+          </h1>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            Manage employees and department assignments
+          </p>
 
-      {/* FILTER */}
-      <div className="flex justify-end mb-4">
-        <select
-          value={department}
-          onChange={e => setDepartment(e.target.value)}
-          className="px-3 py-2 w-60 text-white rounded-lg border bg-slate-800 border-white/10"
-        >
-          <option value="">All Departments</option>
-          <option>IT</option>
-          <option>HR</option>
-          <option>Finance</option>
-          <option>Operations</option>
-        </select>
+          {/* SEARCH */}
+          <div className="mt-4">
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search name, employee ID, email..."
+              className="px-4 py-2 w-full rounded-lg border shadow-sm bg-white/70 border-black/10 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-900/40 dark:border-white/10 dark:text-white md:w-96"
+            />
+          </div>
+        </div>
+
+        {/* RIGHT ACTIONS */}
+        <div className="flex flex-col gap-3 items-start md:items-end">
+          <div className="flex gap-3">
+            <button
+              onClick={handleExport}
+              className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700"
+            >
+              Export List
+            </button>
+
+            <button
+              onClick={() => setShowModal(true)}
+              className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700"
+            >
+              Create Employee
+            </button>
+          </div>
+
+          {/* FILTER */}
+          <select
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+            className="px-3 py-2 w-60 rounded-lg border shadow-sm bg-white/70 border-black/10 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-900/40 dark:border-white/10 dark:text-white"
+          >
+            <option value="">All Departments</option>
+            <option>IT</option>
+            <option>HR</option>
+            <option>Finance</option>
+            <option>Operations</option>
+          </select>
+        </div>
       </div>
 
       {/* TABLE */}
-      <div className="overflow-hidden rounded-xl border bg-white/5 border-white/10">
-        <table className="w-full text-sm text-slate-300">
-          <thead className="bg-white/10">
+      <div className="overflow-hidden rounded-xl border shadow-sm bg-white/70 border-black/10 dark:bg-white/5 dark:border-white/10">
+        <table className="w-full text-sm text-slate-800 dark:text-slate-300">
+          <thead className="bg-black/5 dark:bg-white/10">
             <tr>
               <th className="p-3 text-left">Full Name</th>
               <th className="p-3 text-left">Employee ID</th>
@@ -141,15 +205,32 @@ export default function AdminEmployees() {
           <tbody>
             {loading && (
               <tr>
-                <td colSpan="7" className="p-6 text-center text-slate-400">
+                <td
+                  colSpan="7"
+                  className="p-6 text-center text-slate-600 dark:text-slate-400"
+                >
                   Loading...
                 </td>
               </tr>
             )}
 
+            {!loading && employees.length === 0 && (
+              <tr>
+                <td
+                  colSpan="7"
+                  className="p-6 text-center text-slate-600 dark:text-slate-400"
+                >
+                  No employees found.
+                </td>
+              </tr>
+            )}
+
             {!loading &&
-              employees.map(emp => (
-                <tr key={emp.id} className="border-t border-white/5">
+              employees.map((emp) => (
+                <tr
+                  key={emp.id}
+                  className="border-t border-black/5 dark:border-white/5"
+                >
                   <td className="p-3">{emp.full_name}</td>
                   <td className="p-3">{emp.employee_code}</td>
                   <td className="p-3">{emp.email}</td>
@@ -158,13 +239,23 @@ export default function AdminEmployees() {
                   <td className="p-3">
                     {new Date(emp.created_at).toLocaleDateString()}
                   </td>
+
                   <td className="p-3 text-center">
-                    <button
-                      onClick={() => handleDelete(emp)}
-                      className="px-3 py-1 text-xs text-white bg-purple-600 rounded-md hover:bg-purple-700"
-                    >
-                      Delete
-                    </button>
+                    <div className="flex gap-2 justify-center">
+                      <button
+                        onClick={() => handleEdit(emp)}
+                        className="px-3 py-1 text-xs text-white bg-purple-600 rounded-md hover:bg-purple-700"
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        onClick={() => handleDelete(emp)}
+                        className="px-3 py-1 text-xs text-white bg-purple-600 rounded-md hover:bg-purple-700"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -173,34 +264,42 @@ export default function AdminEmployees() {
       </div>
 
       {/* PAGINATION */}
-      <div className="flex justify-between items-center mt-4 text-sm text-slate-400">
+      <div className="flex justify-between items-center mt-4 text-sm text-slate-600 dark:text-slate-400">
         <span>
-          Page {page} of {totalPages}
+          Page {page} of {totalPages || 1}
         </span>
 
         <div className="flex gap-2">
           <button
             disabled={page === 1}
-            onClick={() => setPage(p => p - 1)}
-            className="px-3 py-1 text-white bg-purple-600 rounded-lg disabled:opacity-40"
+            onClick={() => setPage((p) => p - 1)}
+            className="px-3 py-1 text-white bg-purple-600 rounded-lg disabled:opacity-40 hover:bg-purple-700"
           >
             Prev
           </button>
 
           <button
-            disabled={page === totalPages}
-            onClick={() => setPage(p => p + 1)}
-            className="px-3 py-1 text-white bg-purple-700 rounded-lg disabled:opacity-40"
+            disabled={page === totalPages || totalPages === 0}
+            onClick={() => setPage((p) => p + 1)}
+            className="px-3 py-1 text-white bg-purple-700 rounded-lg disabled:opacity-40 hover:bg-purple-800"
           >
             Next
           </button>
         </div>
       </div>
 
-      {/* MODAL */}
+      {/* CREATE MODAL */}
       <AdminCreateEmployeeModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
+        onSuccess={() => fetchEmployees(page)}
+      />
+
+      {/* EDIT MODAL */}
+      <AdminEditEmployeeModal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        employee={selectedEmployee}
         onSuccess={() => fetchEmployees(page)}
       />
     </div>

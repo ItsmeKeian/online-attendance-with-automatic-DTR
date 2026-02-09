@@ -32,7 +32,7 @@ export default function AdminAttendanceRecords() {
       .then(res => res.json())
       .then(data => {
         setRecords(Array.isArray(data) ? data : [])
-        setPage(1) // reset page on new fetch
+        setPage(1)
       })
       .finally(() => setLoading(false))
   }, [fromDate, toDate, department, employeeId])
@@ -81,10 +81,10 @@ export default function AdminAttendanceRecords() {
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6 no-print">
         <div>
-          <h1 className="text-2xl font-semibold text-white">
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
             Attendance Records
           </h1>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-slate-600 dark:text-slate-400">
             Daily Time Records (DTR)
           </p>
         </div>
@@ -103,20 +103,20 @@ export default function AdminAttendanceRecords() {
           type="date"
           value={fromDate}
           onChange={e => setFromDate(e.target.value)}
-          className="px-3 py-2 text-white rounded-lg border bg-slate-900 border-white/10"
+          className="px-3 py-2 bg-white rounded-lg border shadow-sm border-black/10 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-900 dark:border-white/10 dark:text-white"
         />
 
         <input
           type="date"
           value={toDate}
           onChange={e => setToDate(e.target.value)}
-          className="px-3 py-2 text-white rounded-lg border bg-slate-900 border-white/10"
+          className="px-3 py-2 bg-white rounded-lg border shadow-sm border-black/10 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-900 dark:border-white/10 dark:text-white"
         />
 
         <select
           value={department}
           onChange={e => setDepartment(e.target.value)}
-          className="px-3 py-2 text-white rounded-lg border bg-slate-900 border-white/10"
+          className="px-3 py-2 bg-white rounded-lg border shadow-sm border-black/10 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-900 dark:border-white/10 dark:text-white"
         >
           <option value="">All Departments</option>
           <option>IT</option>
@@ -128,7 +128,7 @@ export default function AdminAttendanceRecords() {
         <select
           value={employeeId}
           onChange={e => setEmployeeId(e.target.value)}
-          className="px-3 py-2 text-white rounded-lg border bg-slate-900 border-white/10"
+          className="px-3 py-2 bg-white rounded-lg border shadow-sm border-black/10 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-900 dark:border-white/10 dark:text-white"
         >
           <option value="">All Employees</option>
           {employees.map(emp => (
@@ -147,10 +147,9 @@ export default function AdminAttendanceRecords() {
       </button>
 
       {/* TABLE */}
-      <div className="overflow-hidden rounded-xl border bg-white/5 border-white/10 no-print">
-
-        <table className="w-full text-sm text-slate-300">
-          <thead className="bg-white/10">
+      <div className="overflow-hidden rounded-xl border shadow-sm bg-white/70 border-black/10 no-print dark:bg-white/5 dark:border-white/10">
+        <table className="w-full text-sm text-slate-800 dark:text-slate-300">
+          <thead className="bg-black/5 dark:bg-white/10">
             <tr>
               <th className="p-3 text-left">Employee</th>
               <th className="p-3 text-left">Date</th>
@@ -165,14 +164,20 @@ export default function AdminAttendanceRecords() {
           <tbody>
             {!loading && paginatedRecords.length === 0 && (
               <tr>
-                <td colSpan="7" className="p-4 text-center text-slate-400">
+                <td
+                  colSpan="7"
+                  className="p-4 text-center text-slate-600 dark:text-slate-400"
+                >
                   No records found
                 </td>
               </tr>
             )}
 
             {paginatedRecords.map((row, index) => (
-              <tr key={index} className="border-t border-white/5">
+              <tr
+                key={index}
+                className="border-t border-black/5 dark:border-white/5"
+              >
                 <td className="p-3">{row.full_name}</td>
                 <td className="p-3">{row.date}</td>
                 <td className="p-3">{row.time_in || "—"}</td>
@@ -188,7 +193,7 @@ export default function AdminAttendanceRecords() {
 
       {/* PAGINATION */}
       {totalPages > 1 && (
-        <div className="flex justify-between items-center mt-4 text-sm text-slate-400 no-print">
+        <div className="flex justify-between items-center mt-4 text-sm text-slate-600 dark:text-slate-400 no-print">
           <span>
             Page {page} of {totalPages}
           </span>
