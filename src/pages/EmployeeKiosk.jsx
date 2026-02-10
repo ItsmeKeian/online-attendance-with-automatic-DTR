@@ -283,7 +283,7 @@ function ActionButton({ label, color, disabled, onClick }) {
       disabled={disabled}
       onClick={onClick}
       className={`
-        h-24 rounded-2xl text-lg font-semibold transition
+        h-20 md:h-24 rounded-2xl text-base md:text-lg font-semibold transition
         ${color}
         ${disabled
           ? "opacity-40 cursor-not-allowed"
@@ -294,3 +294,4 @@ function ActionButton({ label, color, disabled, onClick }) {
     </button>
   )
 }
+

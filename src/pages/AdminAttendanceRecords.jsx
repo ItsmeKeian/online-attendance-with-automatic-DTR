@@ -238,7 +238,9 @@ export default function AdminAttendanceRecords() {
 
     if (status === "out") {
       return (
-        <span className={`text-green-700 bg-green-200 ${base} dark:bg-green-500/20 dark:text-green-300`}>
+        <span
+          className={`text-green-700 bg-green-200 ${base} dark:bg-green-500/20 dark:text-green-300`}
+        >
           OUT
         </span>
       )
@@ -246,21 +248,25 @@ export default function AdminAttendanceRecords() {
 
     if (status === "lunch") {
       return (
-        <span className={`text-yellow-700 bg-yellow-200 ${base} dark:bg-yellow-500/20 dark:text-yellow-300`}>
+        <span
+          className={`text-yellow-700 bg-yellow-200 ${base} dark:bg-yellow-500/20 dark:text-yellow-300`}
+        >
           LUNCH
         </span>
       )
     }
 
     return (
-      <span className={`text-blue-700 bg-blue-200 ${base} dark:bg-blue-500/20 dark:text-blue-300`}>
+      <span
+        className={`text-blue-700 bg-blue-200 ${base} dark:bg-blue-500/20 dark:text-blue-300`}
+      >
         IN
       </span>
     )
   }
 
   return (
-    <div>
+    <div className="w-full">
       {/* ===================== PRINT (FULL DATA) ===================== */}
       <DTRPrint
         records={records}
@@ -270,17 +276,17 @@ export default function AdminAttendanceRecords() {
       />
 
       {/* HEADER */}
-      <div className="flex justify-between items-center mb-6 no-print">
+      <div className="flex flex-col gap-4 justify-between mb-6 md:flex-row md:items-center no-print">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
+          <h1 className="text-xl font-semibold md:text-2xl text-slate-900 dark:text-white">
             Attendance Records
           </h1>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
+          <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400">
             Daily Time Records (DTR)
           </p>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={exportCSV}
             className="px-4 py-2 text-sm text-white rounded-lg bg-slate-700 hover:bg-slate-800"
@@ -326,7 +332,7 @@ export default function AdminAttendanceRecords() {
       </div>
 
       {/* QUICK FILTERS */}
-      <div className="flex gap-2 mb-4 no-print">
+      <div className="flex flex-wrap gap-2 mb-4 no-print">
         <button
           onClick={handleToday}
           className="px-3 py-1 text-sm text-white bg-purple-600 rounded-lg hover:bg-purple-700"
@@ -350,7 +356,7 @@ export default function AdminAttendanceRecords() {
       </div>
 
       {/* FILTERS */}
-      <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-4 no-print">
+      <div className="grid grid-cols-1 gap-3 mb-4 md:grid-cols-2 lg:grid-cols-4 no-print">
         <input
           type="date"
           value={fromDate}
@@ -428,68 +434,127 @@ export default function AdminAttendanceRecords() {
         Apply Filters
       </button>
 
-      {/* TABLE */}
-      <div className="overflow-hidden bg-white rounded-xl border shadow-sm border-black/10 no-print dark:bg-white/5 dark:border-white/10">
-        <table className="w-full text-sm text-slate-800 dark:text-slate-300">
-          <thead className="bg-black/5 dark:bg-white/10">
-            <tr>
-              <th className="p-3 text-left">Employee</th>
-              <th className="p-3 text-left">Date</th>
-              <th className="p-3 text-left">Time In</th>
-              <th className="p-3 text-left">Lunch Out</th>
-              <th className="p-3 text-left">Lunch In</th>
-              <th className="p-3 text-left">Time Out</th>
-              <th className="p-3 text-left">Status</th>
-              <th className="p-3 text-left">Remarks</th>
-              <th className="p-3 text-left">Action</th>
-            </tr>
-          </thead>
+      {/* ===================== MOBILE VIEW (CARDS) ===================== */}
+      <div className="grid grid-cols-1 gap-4 md:hidden no-print">
+        {!loading && paginatedRecords.length === 0 && (
+          <div className="p-4 text-sm text-center bg-white rounded-xl border text-slate-600 border-black/10 dark:text-slate-400 dark:bg-white/5 dark:border-white/10">
+            No records found
+          </div>
+        )}
 
-          <tbody>
-            {!loading && paginatedRecords.length === 0 && (
+        {paginatedRecords.map((row, index) => (
+          <div
+            key={index}
+            className="p-4 bg-white rounded-xl border shadow-sm border-black/10 dark:bg-white/5 dark:border-white/10"
+          >
+            <div className="flex gap-3 justify-between items-start">
+              <div>
+                <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                  {row.full_name}
+                </p>
+                <p className="text-xs text-slate-600 dark:text-slate-400">
+                  {row.date}
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-1 items-end">
+                {getStatusBadge(row.status)}
+                {getRemarksBadge(row)}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 mt-4 text-xs text-slate-700 dark:text-slate-300">
+              <p>
+                <span className="font-semibold">Time In:</span>{" "}
+                {row.time_in || "—"}
+              </p>
+              <p>
+                <span className="font-semibold">Lunch Out:</span>{" "}
+                {row.lunch_out || "—"}
+              </p>
+              <p>
+                <span className="font-semibold">Lunch In:</span>{" "}
+                {row.lunch_in || "—"}
+              </p>
+              <p>
+                <span className="font-semibold">Time Out:</span>{" "}
+                {row.time_out || "—"}
+              </p>
+            </div>
+
+            <button
+              onClick={() => setSelectedRecord(row)}
+              className="px-3 py-2 mt-4 w-full text-sm text-white bg-purple-600 rounded-lg hover:bg-purple-700"
+            >
+              View Details
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {/* ===================== DESKTOP VIEW (TABLE) ===================== */}
+      <div className="hidden md:block no-print">
+        <div className="overflow-x-auto bg-white rounded-xl border shadow-sm border-black/10 dark:bg-white/5 dark:border-white/10">
+          <table className="min-w-[900px] w-full text-sm text-slate-800 dark:text-slate-300">
+            <thead className="bg-black/5 dark:bg-white/10">
               <tr>
-                <td
-                  colSpan="9"
-                  className="p-4 text-center text-slate-600 dark:text-slate-400"
-                >
-                  No records found
-                </td>
+                <th className="p-3 text-left">Employee</th>
+                <th className="p-3 text-left">Date</th>
+                <th className="p-3 text-left">Time In</th>
+                <th className="p-3 text-left">Lunch Out</th>
+                <th className="p-3 text-left">Lunch In</th>
+                <th className="p-3 text-left">Time Out</th>
+                <th className="p-3 text-left">Status</th>
+                <th className="p-3 text-left">Remarks</th>
+                <th className="p-3 text-left">Action</th>
               </tr>
-            )}
+            </thead>
 
-            {paginatedRecords.map((row, index) => (
-              <tr
-                key={index}
-                className="border-t border-black/5 dark:border-white/5"
-              >
-                <td className="p-3">{row.full_name}</td>
-                <td className="p-3">{row.date}</td>
-                <td className="p-3">{row.time_in || "—"}</td>
-                <td className="p-3">{row.lunch_out || "—"}</td>
-                <td className="p-3">{row.lunch_in || "—"}</td>
-                <td className="p-3">{row.time_out || "—"}</td>
-
-                <td className="p-3">{getStatusBadge(row.status)}</td>
-
-                <td className="p-3">{getRemarksBadge(row)}</td>
-
-                <td className="p-3">
-                  <button
-                    onClick={() => setSelectedRecord(row)}
-                    className="px-3 py-1 text-xs text-white bg-purple-600 rounded-md hover:bg-purple-700"
+            <tbody>
+              {!loading && paginatedRecords.length === 0 && (
+                <tr>
+                  <td
+                    colSpan="9"
+                    className="p-4 text-center text-slate-600 dark:text-slate-400"
                   >
-                    View
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    No records found
+                  </td>
+                </tr>
+              )}
+
+              {paginatedRecords.map((row, index) => (
+                <tr
+                  key={index}
+                  className="border-t border-black/5 dark:border-white/5"
+                >
+                  <td className="p-3">{row.full_name}</td>
+                  <td className="p-3">{row.date}</td>
+                  <td className="p-3">{row.time_in || "—"}</td>
+                  <td className="p-3">{row.lunch_out || "—"}</td>
+                  <td className="p-3">{row.lunch_in || "—"}</td>
+                  <td className="p-3">{row.time_out || "—"}</td>
+
+                  <td className="p-3">{getStatusBadge(row.status)}</td>
+                  <td className="p-3">{getRemarksBadge(row)}</td>
+
+                  <td className="p-3">
+                    <button
+                      onClick={() => setSelectedRecord(row)}
+                      className="px-3 py-1 text-xs text-white bg-purple-600 rounded-md hover:bg-purple-700"
+                    >
+                      View
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* PAGINATION */}
       {totalPages > 1 && (
-        <div className="flex justify-between items-center mt-4 text-sm text-slate-600 dark:text-slate-400 no-print">
+        <div className="flex flex-col gap-3 justify-between items-start mt-4 text-sm md:flex-row md:items-center text-slate-600 dark:text-slate-400 no-print">
           <span>
             Page {page} of {totalPages}
           </span>
@@ -516,8 +581,8 @@ export default function AdminAttendanceRecords() {
 
       {/* ===================== MODAL VIEW ===================== */}
       {selectedRecord && (
-        <div className="flex fixed inset-0 z-50 justify-center items-center bg-black/60 no-print">
-          <div className="p-6 w-full max-w-3xl bg-white rounded-xl border shadow-lg border-black/10 dark:bg-slate-900 dark:border-white/10">
+        <div className="flex fixed inset-0 z-50 justify-center items-center p-4 bg-black/60 no-print">
+          <div className="p-5 w-full max-w-3xl bg-white rounded-xl border shadow-lg border-black/10 dark:bg-slate-900 dark:border-white/10 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold text-slate-900 dark:text-white">
                 Attendance Details
@@ -531,7 +596,7 @@ export default function AdminAttendanceRecords() {
               </button>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 mb-6 text-sm md:grid-cols-2 text-slate-700 dark:text-slate-300">
+            <div className="grid grid-cols-1 gap-3 mb-6 text-sm md:grid-cols-2 text-slate-700 dark:text-slate-300">
               <p>
                 Employee: <strong>{selectedRecord.full_name}</strong>
               </p>

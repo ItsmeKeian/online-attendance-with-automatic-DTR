@@ -89,11 +89,13 @@ export default function AdminCreateEmployee({ isOpen, onClose, onSuccess }) {
   }
 
   const inputClass =
-    "px-4 py-2 bg-white rounded-lg border shadow-sm border-black/10 text-slate-900 placeholder:text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-800 dark:border-white/10 dark:text-white dark:placeholder:text-slate-50"
+    "px-4 py-2 bg-white rounded-lg border shadow-sm border-black/10 text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-800 dark:border-white/10 dark:text-white dark:placeholder:text-slate-400"
 
   return (
     <div className="flex fixed inset-0 z-50 justify-center items-center px-4 bg-black/60">
-      <div className="w-full max-w-3xl bg-white rounded-2xl border shadow-xl border-black/10 dark:bg-slate-900 dark:border-white/10">
+      {/* MODAL BOX */}
+      <div className="w-full max-w-3xl max-h-[90vh] overflow-hidden bg-white rounded-2xl border shadow-xl border-black/10 dark:bg-slate-900 dark:border-white/10">
+        
         {/* HEADER */}
         <div className="flex justify-between items-center px-6 py-4 border-b border-black/10 dark:border-white/10">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
@@ -108,109 +110,112 @@ export default function AdminCreateEmployee({ isOpen, onClose, onSuccess }) {
           </button>
         </div>
 
-        {/* FORM */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {error && (
-            <div className="px-4 py-3 text-sm text-rose-600 rounded-lg bg-rose-500/10 dark:text-rose-400">
-              {error}
+        {/* BODY SCROLL */}
+        <div className="overflow-y-auto max-h-[calc(90vh-70px)]">
+          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            {error && (
+              <div className="px-4 py-3 text-sm text-rose-600 rounded-lg bg-rose-500/10 dark:text-rose-400">
+                {error}
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <input
+                name="full_name"
+                value={form.full_name}
+                placeholder="Full Name"
+                onChange={handleChange}
+                className={inputClass}
+              />
+
+              <input
+                name="email"
+                value={form.email}
+                placeholder="Email"
+                onChange={handleChange}
+                className={inputClass}
+              />
+
+              <input
+                name="phone"
+                value={form.phone}
+                placeholder="Phone Number"
+                onChange={handleChange}
+                className={inputClass}
+              />
+
+              <input
+                name="age"
+                value={form.age}
+                placeholder="Age"
+                onChange={handleChange}
+                className={inputClass}
+              />
+
+              <input
+                name="job_title"
+                value={form.job_title}
+                placeholder="Job Title"
+                onChange={handleChange}
+                className={inputClass}
+              />
+
+              <select
+                name="sex"
+                value={form.sex}
+                onChange={handleChange}
+                className={inputClass}
+              >
+                <option value="">Sex</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+              </select>
+
+              <select
+                name="department"
+                value={form.department}
+                onChange={handleChange}
+                className={`${inputClass} md:col-span-2`}
+              >
+                <option value="">Select Department</option>
+                <option>IT</option>
+                <option>HR</option>
+                <option>Finance</option>
+                <option>Operations</option>
+              </select>
+
+              <textarea
+                name="address"
+                rows="3"
+                value={form.address}
+                placeholder="Address"
+                onChange={handleChange}
+                className={`${inputClass} md:col-span-2`}
+              />
             </div>
-          )}
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <input
-              name="full_name"
-              value={form.full_name}
-              placeholder="Full Name"
-              onChange={handleChange}
-              className={inputClass}
-            />
+            {/* FOOTER */}
+            <div className="flex flex-col gap-3 justify-end pt-4 border-t border-black/10 dark:border-white/10 sm:flex-row">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 w-full rounded-lg text-slate-700 hover:bg-black/5 dark:text-slate-300 dark:hover:bg-white/5 sm:w-auto"
+              >
+                Cancel
+              </button>
 
-            <input
-              name="email"
-              value={form.email}
-              placeholder="Email"
-              onChange={handleChange}
-              className={inputClass}
-            />
+              <button
+                type="submit"
+                disabled={loading}
+                className="px-6 py-2 w-full text-white bg-purple-600 rounded-lg hover:bg-purple-700 disabled:opacity-50 sm:w-auto"
+              >
+                {loading ? "Creating..." : "Create Employee"}
+              </button>
+            </div>
+          </form>
+        </div>
 
-            <input
-              name="phone"
-              value={form.phone}
-              placeholder="Phone Number"
-              onChange={handleChange}
-              className={inputClass}
-            />
-
-            <input
-              name="age"
-              value={form.age}
-              placeholder="Age"
-              onChange={handleChange}
-              className={inputClass}
-            />
-
-            <input
-              name="job_title"
-              value={form.job_title}
-              placeholder="Job Title"
-              onChange={handleChange}
-              className={inputClass}
-            />
-
-            <select
-              name="sex"
-              value={form.sex}
-              onChange={handleChange}
-              className={inputClass}
-            >
-              <option value="">Sex</option>
-              <option>Male</option>
-              <option>Female</option>
-              <option>Other</option>
-            </select>
-
-            <select
-              name="department"
-              value={form.department}
-              onChange={handleChange}
-              className={`${inputClass} md:col-span-2`}
-            >
-              <option value="">Select Department</option>
-              <option>IT</option>
-              <option>HR</option>
-              <option>Finance</option>
-              <option>Operations</option>
-            </select>
-
-            <textarea
-              name="address"
-              rows="3"
-              value={form.address}
-              placeholder="Address"
-              onChange={handleChange}
-              className={`${inputClass} md:col-span-2`}
-            />
-          </div>
-
-          {/* FOOTER */}
-          <div className="flex gap-3 justify-end pt-4 border-t border-black/10 dark:border-white/10">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-lg text-slate-700 hover:bg-black/5 dark:text-slate-300 dark:hover:bg-white/5"
-            >
-              Cancel
-            </button>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-6 py-2 text-white bg-purple-600 rounded-lg hover:bg-purple-700 disabled:opacity-50"
-            >
-              {loading ? "Creating..." : "Create Employee"}
-            </button>
-          </div>
-        </form>
       </div>
     </div>
   )

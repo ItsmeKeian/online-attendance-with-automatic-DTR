@@ -90,98 +90,104 @@ export default function AdminEditEmployeeModal({
   }
 
   return (
-    <div className="flex fixed inset-0 z-50 justify-center items-center backdrop-blur-sm bg-black/50">
-      <div className="p-6 w-full max-w-lg rounded-xl border shadow-lg bg-white/90 border-black/10 dark:bg-slate-950 dark:border-white/10">
+    <div className="flex fixed inset-0 z-50 justify-center items-center px-4 backdrop-blur-sm bg-black/50">
+      <div className="w-full max-w-lg max-h-[90vh] overflow-hidden rounded-xl border shadow-lg bg-white/90 border-black/10 dark:bg-slate-950 dark:border-white/10">
+
         {/* HEADER */}
-        <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
-          Edit Employee
-        </h2>
-        <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-          Update employee information
-        </p>
+        <div className="px-6 py-4 border-b border-black/10 dark:border-white/10">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+            Edit Employee
+          </h2>
+          <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+            Update employee information
+          </p>
+        </div>
 
-        {/* FORM */}
-        <form onSubmit={handleUpdate} className="mt-6 space-y-4">
-          {/* FULL NAME */}
-          <div>
-            <label className="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-300">
-              Full Name <span className="text-red-500">*</span>
-            </label>
-            <input
-              name="full_name"
-              value={form.full_name}
-              onChange={handleChange}
-              placeholder="Enter full name"
-              className="px-4 py-2 w-full bg-white rounded-lg border border-black/10 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-900 dark:border-white/10 dark:text-white"
-            />
-          </div>
+        {/* BODY SCROLL */}
+        <div className="overflow-y-auto max-h-[calc(90vh-90px)] px-6 py-5">
+          <form onSubmit={handleUpdate} className="space-y-4">
+            {/* FULL NAME */}
+            <div>
+              <label className="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-300">
+                Full Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                name="full_name"
+                value={form.full_name}
+                onChange={handleChange}
+                placeholder="Enter full name"
+                className="px-4 py-2 w-full bg-white rounded-lg border border-black/10 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-900 dark:border-white/10 dark:text-white"
+              />
+            </div>
 
-          {/* EMAIL */}
-          <div>
-            <label className="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-300">
-              Email <span className="text-red-500">*</span>
-            </label>
-            <input
-              name="email"
-              type="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="Enter email address"
-              className="px-4 py-2 w-full bg-white rounded-lg border border-black/10 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-900 dark:border-white/10 dark:text-white"
-            />
-          </div>
+            {/* EMAIL */}
+            <div>
+              <label className="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-300">
+                Email <span className="text-red-500">*</span>
+              </label>
+              <input
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Enter email address"
+                className="px-4 py-2 w-full bg-white rounded-lg border border-black/10 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-900 dark:border-white/10 dark:text-white"
+              />
+            </div>
 
-          {/* JOB TITLE */}
-          <div>
-            <label className="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-300">
-              Job Title
-            </label>
-            <input
-              name="job_title"
-              value={form.job_title}
-              onChange={handleChange}
-              placeholder="Enter job title"
-              className="px-4 py-2 w-full bg-white rounded-lg border border-black/10 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-900 dark:border-white/10 dark:text-white"
-            />
-          </div>
+            {/* JOB TITLE */}
+            <div>
+              <label className="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-300">
+                Job Title
+              </label>
+              <input
+                name="job_title"
+                value={form.job_title}
+                onChange={handleChange}
+                placeholder="Enter job title"
+                className="px-4 py-2 w-full bg-white rounded-lg border border-black/10 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-900 dark:border-white/10 dark:text-white"
+              />
+            </div>
 
-          {/* DEPARTMENT */}
-          <div>
-            <label className="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-300">
-              Department <span className="text-red-500">*</span>
-            </label>
-            <select
-              name="department"
-              value={form.department}
-              onChange={handleChange}
-              className="px-4 py-2 w-full bg-white rounded-lg border border-black/10 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-900 dark:border-white/10 dark:text-white"
-            >
-              <option value="">Select Department</option>
-              <option>IT</option>
-              <option>HR</option>
-              <option>Finance</option>
-              <option>Operations</option>
-            </select>
-          </div>
+            {/* DEPARTMENT */}
+            <div>
+              <label className="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-300">
+                Department <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="department"
+                value={form.department}
+                onChange={handleChange}
+                className="px-4 py-2 w-full bg-white rounded-lg border border-black/10 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-900 dark:border-white/10 dark:text-white"
+              >
+                <option value="">Select Department</option>
+                <option>IT</option>
+                <option>HR</option>
+                <option>Finance</option>
+                <option>Operations</option>
+              </select>
+            </div>
 
-          {/* BUTTONS */}
-          <div className="flex gap-3 justify-end pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-lg border border-black/10 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5"
-            >
-              Cancel
-            </button>
+            {/* BUTTONS */}
+            <div className="flex flex-col gap-3 justify-end pt-4 sm:flex-row">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 w-full rounded-lg border border-black/10 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5 sm:w-auto"
+              >
+                Cancel
+              </button>
 
-            <button
-              type="submit"
-              className="px-4 py-2 text-white bg-purple-600 rounded-lg hover:bg-purple-700"
-            >
-              Update
-            </button>
-          </div>
-        </form>
+              <button
+                type="submit"
+                className="px-4 py-2 w-full text-white bg-purple-600 rounded-lg hover:bg-purple-700 sm:w-auto"
+              >
+                Update
+              </button>
+            </div>
+          </form>
+        </div>
+
       </div>
     </div>
   )

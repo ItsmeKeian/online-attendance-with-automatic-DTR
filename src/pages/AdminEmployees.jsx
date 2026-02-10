@@ -132,14 +132,14 @@ export default function AdminEmployees() {
   }
 
   return (
-    <div>
+    <div className="w-full">
       {/* HEADER */}
       <div className="flex flex-col gap-4 mb-6 md:flex-row md:items-start md:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
+        <div className="w-full">
+          <h1 className="text-xl font-semibold md:text-2xl text-slate-900 dark:text-white">
             Employees Records
           </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-1 text-xs md:text-sm text-slate-500 dark:text-slate-400">
             Manage employees and department assignments
           </p>
 
@@ -153,118 +153,192 @@ export default function AdminEmployees() {
             />
           </div>
         </div>
-      
-        {/* RIGHT ACTIONS */}
-        <div className="flex flex-col gap-3 items-start md:items-end">
-          <div className="flex gap-3">
-            <button
-              onClick={handleExport}
-               className="px-4 py-2 text-sm text-white rounded-lg bg-slate-700 hover:bg-slate-600"
-            >
-              Export List
-            </button>
 
-            <button
-              onClick={() => setShowModal(true)}
-              className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700"
+        {/* RIGHT ACTIONS */}
+       
+        <div className="flex flex-col gap-3 items-start md:items-end">
+        <div className="flex gap-2">
+                <button
+                  onClick={handleExport}
+                  className="px-4 py-2 text-sm text-white whitespace-nowrap rounded-lg bg-slate-700 hover:bg-slate-600"
+                >
+                  Export List
+                </button>
+
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="px-4 py-2 text-sm font-medium text-white whitespace-nowrap bg-purple-600 rounded-lg hover:bg-purple-700"
+                >
+                  Create Employee
+                </button>
+              </div>
+
+
+            <select
+              value={department}
+              onChange={(e) => setDepartment(e.target.value)}
+              className="px-3 py-2 w-full rounded-lg border shadow-sm md:w-60 bg-white/70 border-black/10 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-900/40 dark:border-white/10 dark:text-white"
             >
-              Create Employee
-            </button>
+              <option value="">All Departments</option>
+              <option>IT</option>
+              <option>HR</option>
+              <option>Finance</option>
+              <option>Operations</option>
+            </select>
           </div>
 
-          {/* FILTER */}
-          <select
-            value={department}
-            onChange={(e) => setDepartment(e.target.value)}
-            className="px-3 py-2 w-60 rounded-lg border shadow-sm bg-white/70 border-black/10 text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-slate-900/40 dark:border-white/10 dark:text-white"
-          >
-            <option value="">All Departments</option>
-            <option>IT</option>
-            <option>HR</option>
-            <option>Finance</option>
-            <option>Operations</option>
-          </select>
+
+
+      </div>
+
+      {/* ===================== MOBILE VIEW (CARDS) ===================== */}
+      <div className="grid grid-cols-1 gap-4 md:hidden">
+        {loading && (
+          <div className="p-6 text-center rounded-xl border text-slate-600 dark:text-slate-400 bg-white/70 border-black/10 dark:bg-white/5 dark:border-white/10">
+            Loading...
+          </div>
+        )}
+
+        {!loading && employees.length === 0 && (
+          <div className="p-6 text-center rounded-xl border text-slate-600 dark:text-slate-400 bg-white/70 border-black/10 dark:bg-white/5 dark:border-white/10">
+            No employees found.
+          </div>
+        )}
+
+        {!loading &&
+          employees.map((emp) => (
+            <div
+              key={emp.id}
+              className="p-4 rounded-xl border shadow-sm bg-white/70 border-black/10 dark:bg-white/5 dark:border-white/10"
+            >
+              <div className="flex gap-3 justify-between items-start">
+                <div>
+                  <h2 className="text-sm font-semibold text-slate-900 dark:text-white">
+                    {emp.full_name}
+                  </h2>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
+                    {emp.employee_code}
+                  </p>
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleEdit(emp)}
+                    className="px-3 py-1 text-xs text-white bg-purple-600 rounded-md hover:bg-purple-700"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(emp)}
+                    className="px-3 py-1 text-xs text-white bg-purple-600 rounded-md hover:bg-purple-700"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-2 mt-4 text-xs text-slate-700 dark:text-slate-300">
+                <p>
+                  <span className="font-semibold">Email:</span> {emp.email}
+                </p>
+                <p>
+                  <span className="font-semibold">Department:</span>{" "}
+                  {emp.department}
+                </p>
+                <p>
+                  <span className="font-semibold">Job Title:</span>{" "}
+                  {emp.job_title}
+                </p>
+                <p>
+                  <span className="font-semibold">Date Created:</span>{" "}
+                  {new Date(emp.created_at).toLocaleDateString()}
+                </p>
+              </div>
+            </div>
+          ))}
+      </div>
+
+      {/* ===================== DESKTOP VIEW (TABLE) ===================== */}
+      <div className="hidden md:block">
+        <div className="overflow-x-auto rounded-xl border shadow-sm bg-white/70 border-black/10 dark:bg-white/5 dark:border-white/10">
+          <table className="min-w-[900px] w-full text-sm text-slate-800 dark:text-slate-300">
+            <thead className="bg-black/5 dark:bg-white/10">
+              <tr>
+                <th className="p-3 text-left">Full Name</th>
+                <th className="p-3 text-left">Employee ID</th>
+                <th className="p-3 text-left">Email</th>
+                <th className="p-3 text-left">Department</th>
+                <th className="p-3 text-left">Job Title</th>
+                <th className="p-3 text-left">Date Created</th>
+                <th className="p-3 text-center">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {loading && (
+                <tr>
+                  <td
+                    colSpan="7"
+                    className="p-6 text-center text-slate-600 dark:text-slate-400"
+                  >
+                    Loading...
+                  </td>
+                </tr>
+              )}
+
+              {!loading && employees.length === 0 && (
+                <tr>
+                  <td
+                    colSpan="7"
+                    className="p-6 text-center text-slate-600 dark:text-slate-400"
+                  >
+                    No employees found.
+                  </td>
+                </tr>
+              )}
+
+              {!loading &&
+                employees.map((emp) => (
+                  <tr
+                    key={emp.id}
+                    className="border-t border-black/5 dark:border-white/5"
+                  >
+                    <td className="p-3">{emp.full_name}</td>
+                    <td className="p-3">{emp.employee_code}</td>
+                    <td className="p-3">{emp.email}</td>
+                    <td className="p-3">{emp.department}</td>
+                    <td className="p-3">{emp.job_title}</td>
+                    <td className="p-3">
+                      {new Date(emp.created_at).toLocaleDateString()}
+                    </td>
+
+                    <td className="p-3 text-center">
+                      <div className="flex gap-2 justify-center">
+                        <button
+                          onClick={() => handleEdit(emp)}
+                          className="px-3 py-1 text-xs text-white bg-purple-600 rounded-md hover:bg-purple-700"
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          onClick={() => handleDelete(emp)}
+                          className="px-3 py-1 text-xs text-white bg-purple-600 rounded-md hover:bg-purple-700"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
         </div>
       </div>
 
-      {/* TABLE */}
-      <div className="overflow-hidden rounded-xl border shadow-sm bg-white/70 border-black/10 dark:bg-white/5 dark:border-white/10">
-        <table className="w-full text-sm text-slate-800 dark:text-slate-300">
-          <thead className="bg-black/5 dark:bg-white/10">
-            <tr>
-              <th className="p-3 text-left">Full Name</th>
-              <th className="p-3 text-left">Employee ID</th>
-              <th className="p-3 text-left">Email</th>
-              <th className="p-3 text-left">Department</th>
-              <th className="p-3 text-left">Job Title</th>
-              <th className="p-3 text-left">Date Created</th>
-              <th className="p-3 text-center">Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {loading && (
-              <tr>
-                <td
-                  colSpan="7"
-                  className="p-6 text-center text-slate-600 dark:text-slate-400"
-                >
-                  Loading...
-                </td>
-              </tr>
-            )}
-
-            {!loading && employees.length === 0 && (
-              <tr>
-                <td
-                  colSpan="7"
-                  className="p-6 text-center text-slate-600 dark:text-slate-400"
-                >
-                  No employees found.
-                </td>
-              </tr>
-            )}
-
-            {!loading &&
-              employees.map((emp) => (
-                <tr
-                  key={emp.id}
-                  className="border-t border-black/5 dark:border-white/5"
-                >
-                  <td className="p-3">{emp.full_name}</td>
-                  <td className="p-3">{emp.employee_code}</td>
-                  <td className="p-3">{emp.email}</td>
-                  <td className="p-3">{emp.department}</td>
-                  <td className="p-3">{emp.job_title}</td>
-                  <td className="p-3">
-                    {new Date(emp.created_at).toLocaleDateString()}
-                  </td>
-
-                  <td className="p-3 text-center">
-                    <div className="flex gap-2 justify-center">
-                      <button
-                        onClick={() => handleEdit(emp)}
-                        className="px-3 py-1 text-xs text-white bg-purple-600 rounded-md hover:bg-purple-700"
-                      >
-                        Edit
-                      </button>
-
-                      <button
-                        onClick={() => handleDelete(emp)}
-                        className="px-3 py-1 text-xs text-white bg-purple-600 rounded-md hover:bg-purple-700"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
-
       {/* PAGINATION */}
-      <div className="flex justify-between items-center mt-4 text-sm text-slate-600 dark:text-slate-400">
+      <div className="flex flex-col gap-3 justify-between items-start mt-4 text-sm md:flex-row md:items-center text-slate-600 dark:text-slate-400">
         <span>
           Page {page} of {totalPages || 1}
         </span>
