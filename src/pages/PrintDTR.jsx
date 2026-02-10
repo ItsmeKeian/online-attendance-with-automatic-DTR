@@ -12,6 +12,36 @@ function getMonthLabel(records) {
   })
 }
 
+// =========================
+// HELPERS
+// =========================
+function computeUndertimeMinutes(timeOut) {
+  if (!timeOut) return 0
+
+  // Scheduled OUT = 5:00 PM
+  const scheduledOut = new Date(`1970-01-01T17:00:00`)
+  const actualOut = new Date(`1970-01-01T${timeOut}`)
+
+  if (isNaN(actualOut.getTime())) return 0
+
+  if (actualOut < scheduledOut) {
+    return Math.floor((scheduledOut - actualOut) / 60000)
+  }
+
+  return 0
+}
+
+function computeUndertime(timeOut) {
+  const totalMinutes = computeUndertimeMinutes(timeOut)
+
+  if (totalMinutes <= 0) return { hours: "", mins: "" }
+
+  return {
+    hours: Math.floor(totalMinutes / 60),
+    mins: totalMinutes % 60,
+  }
+}
+
 export default function DTRPrint({ records, department }) {
   const monthLabel = getMonthLabel(records)
 
@@ -67,14 +97,25 @@ export default function DTRPrint({ records, department }) {
 // SINGLE FORM 48
 // =========================
 function DTRForm({ employee, department, monthLabel }) {
+  // =========================
+  // TOTAL UNDERTIME
+  // =========================
+  let totalUndertimeMinutes = 0
+
+  for (let day = 1; day <= 31; day++) {
+    const r = employee.records[day]
+    if (r && r.time_out) {
+      totalUndertimeMinutes += computeUndertimeMinutes(r.time_out)
+    }
+  }
+
+  const totalHours = Math.floor(totalUndertimeMinutes / 60)
+  const totalMins = totalUndertimeMinutes % 60
+
   return (
     <div className="dtr-form">
-      <h2 className="font-bold text-center">
-        Civil Service Form No. 48
-      </h2>
-      <h3 className="mb-2 font-bold text-center">
-        DAILY TIME RECORD
-      </h3>
+      <h2 className="font-bold text-center">Civil Service Form No. 48</h2>
+      <h3 className="mb-2 font-bold text-center">DAILY TIME RECORD</h3>
 
       <div className="mb-2 text-xs">
         <p>
@@ -83,9 +124,7 @@ function DTRForm({ employee, department, monthLabel }) {
         <p>
           For the month of: <strong>{monthLabel}</strong>
         </p>
-        <p>
-          Department: {department || employee.department}
-        </p>
+        <p>Department: {department || employee.department}</p>
       </div>
 
       <table className="dtr-table">
@@ -111,6 +150,8 @@ function DTRForm({ employee, department, monthLabel }) {
             const day = i + 1
             const r = employee.records[day] || {}
 
+            const undertime = computeUndertime(r.time_out)
+
             return (
               <tr key={day}>
                 <td>{day}</td>
@@ -118,18 +159,31 @@ function DTRForm({ employee, department, monthLabel }) {
                 <td>{r.lunch_out || ""}</td>
                 <td>{r.lunch_in || ""}</td>
                 <td>{r.time_out || ""}</td>
-                <td></td>
-                <td></td>
+                <td>{undertime.hours}</td>
+                <td>{undertime.mins}</td>
               </tr>
             )
           })}
+
+          {/* TOTAL ROW */}
+          <tr>
+            <td colSpan="5" style={{ fontWeight: "bold", textAlign: "right" }}>
+              TOTAL UNDERTIME
+            </td>
+            <td style={{ fontWeight: "bold" }}>
+              {totalUndertimeMinutes > 0 ? totalHours : ""}
+            </td>
+            <td style={{ fontWeight: "bold" }}>
+              {totalUndertimeMinutes > 0 ? totalMins : ""}
+            </td>
+          </tr>
         </tbody>
       </table>
 
       <div className="dtr-footer">
         <p>
-          I certify on my honor that the above is a true and correct report
-          of the hours of work performed.
+          I certify on my honor that the above is a true and correct report of
+          the hours of work performed.
         </p>
 
         <div className="mt-4 text-center">

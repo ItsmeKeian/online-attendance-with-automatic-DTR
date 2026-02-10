@@ -153,13 +153,13 @@ export default function AdminEmployees() {
             />
           </div>
         </div>
-
+      
         {/* RIGHT ACTIONS */}
         <div className="flex flex-col gap-3 items-start md:items-end">
           <div className="flex gap-3">
             <button
               onClick={handleExport}
-              className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700"
+               className="px-4 py-2 text-sm text-white rounded-lg bg-slate-700 hover:bg-slate-600"
             >
               Export List
             </button>

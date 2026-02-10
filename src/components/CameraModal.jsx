@@ -40,20 +40,20 @@ export default function CameraModal({ onCapture, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4">
-      <div className="bg-slate-900 rounded-2xl p-8 w-full max-w-xl border border-white/10 shadow-2xl">
+    <div className="flex fixed inset-0 z-50 justify-center items-center px-4 bg-black/80">
+      <div className="p-8 w-full max-w-xl rounded-2xl border shadow-2xl bg-slate-900 border-white/10">
 
         {/* Header */}
-        <h2 className="text-center text-lg font-semibold text-white mb-2">
+        <h2 className="mb-2 text-lg font-semibold text-center text-white">
           Align your face inside the frame
         </h2>
-        <p className="text-center text-sm text-slate-400 mb-4">
+        <p className="mb-4 text-sm text-center text-slate-400">
           Make sure your face is clearly visible before capturing
         </p>
 
         {/* Error */}
         {error && (
-          <div className="mb-4 text-sm text-red-400 bg-red-500/10 px-4 py-2 rounded-lg text-center">
+          <div className="px-4 py-2 mb-4 text-sm text-center text-red-400 rounded-lg bg-red-500/10">
             {error}
           </div>
         )}
@@ -64,7 +64,7 @@ export default function CameraModal({ onCapture, onClose }) {
             ref={videoRef}
             autoPlay
             playsInline
-            className="w-full h-80 md:h-96 object-cover rounded-xl bg-black"
+            className="object-cover w-full h-80 bg-black rounded-xl md:h-96"
           />
         </div>
 
@@ -72,14 +72,14 @@ export default function CameraModal({ onCapture, onClose }) {
         <div className="flex gap-4">
           <button
             onClick={capturePhoto}
-            className="flex-1 py-4 rounded-xl bg-emerald-600 text-white text-lg font-semibold hover:bg-emerald-700 active:scale-95 transition"
+            className="flex-1 py-4 text-lg font-semibold text-white bg-emerald-600 rounded-xl transition hover:bg-emerald-700 active:scale-95"
           >
             Capture
           </button>
 
           <button
             onClick={onClose}
-            className="flex-1 py-4 rounded-xl bg-slate-700 text-slate-200 text-lg hover:bg-slate-600"
+            className="flex-1 py-4 text-lg rounded-xl bg-slate-700 text-slate-200 hover:bg-slate-600"
           >
             Cancel
           </button>
