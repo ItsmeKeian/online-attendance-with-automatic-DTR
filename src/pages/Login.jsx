@@ -1,11 +1,28 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 export default function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [darkMode, setDarkMode] = useState(false)
+
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("loginTheme")
+    if (savedTheme === "dark") {
+      setDarkMode(true)
+    }
+  }, [])
+
+  function toggleTheme() {
+    setDarkMode(prev => {
+      const newMode = !prev
+      localStorage.setItem("loginTheme", newMode ? "dark" : "light")
+      return newMode
+    })
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -40,58 +57,130 @@ export default function Login() {
   }
 
   return (
-    <div className="flex justify-center items-center px-4 min-h-screen via-gray-900 to-black bg-linear-to-br from-slate-900">
-      <div className="p-6 w-full max-w-md rounded-2xl border-2 border-violet-600 shadow-2xl md:p-8 bg-slate-950">
+    <div
+      className={`flex justify-center items-center px-4 min-h-screen transition-colors duration-300
+        ${
+          darkMode
+            ? "bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"
+            : "bg-gradient-to-br from-slate-100 via-slate-200 to-slate-100"
+        }`}
+    >
+      <div className="w-full max-w-md">
+        {/* Card */}
+        <div
+          className={`relative p-8 rounded-2xl border shadow-xl transition-colors duration-300
+            ${
+              darkMode
+                ? "bg-slate-900 border-slate-700"
+                : "bg-white border-slate-200"
+            }`}
+        >
+          {/* Toggle Switch */}
+          <div className="flex absolute top-5 right-5 gap-2 items-center">
+            <span className="text-sm">{darkMode ? "" : ""}</span>
 
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-extrabold text-violet-600 md:text-3xl">
-            Admin Login
-          </h1>
-          <p className="mt-2 text-xs text-violet-600 md:text-sm">
-            Online DTR – HR Access Only
-          </p>
+            <button
+              onClick={toggleTheme}
+              type="button"
+              className={`relative w-12 h-6 flex items-center rounded-full transition-colors duration-300
+                ${darkMode ? "bg-violet-600" : "bg-slate-300"}`}
+            >
+              <span
+                className={`absolute w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300
+                  ${darkMode ? "translate-x-6" : "translate-x-1"}`}
+              />
+            </button>
+          </div>
+
+          {/* Header */}
+          <div className="mb-8 text-center">
+            <h1
+              className={`text-2xl font-bold ${
+                darkMode ? "text-white" : "text-slate-900"
+              }`}
+            >
+              SmartDTR Login
+            </h1>
+
+            <p
+              className={`mt-2 text-sm ${
+                darkMode ? "text-slate-400" : "text-slate-500"
+              }`}
+            >
+              Sign in to access the SmartDTR Admin Panel
+            </p>
+          </div>
+
+          {/* Error */}
+          {error && (
+            <div className="p-3 mb-5 text-sm text-red-700 bg-red-50 rounded-xl border border-red-200">
+              {error}
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label
+                className={`block mb-2 text-sm font-medium ${
+                  darkMode ? "text-slate-200" : "text-slate-700"
+                }`}
+              >
+                Email Address
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="admin@email.com"
+                className={`px-4 py-3 w-full rounded-xl border focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors duration-300
+                  ${
+                    darkMode
+                      ? "text-white bg-slate-800 border-slate-700 placeholder:text-slate-400"
+                      : "bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-400"
+                  }`}
+                required
+              />
+            </div>
+
+            <div>
+              <label
+                className={`block mb-2 text-sm font-medium ${
+                  darkMode ? "text-slate-200" : "text-slate-700"
+                }`}
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                className={`px-4 py-3 w-full rounded-xl border focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors duration-300
+                  ${
+                    darkMode
+                      ? "text-white bg-slate-800 border-slate-700 placeholder:text-slate-400"
+                      : "bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-400"
+                  }`}
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="py-3 w-full font-semibold text-white bg-violet-600 rounded-xl shadow-md transition hover:bg-violet-700 active:scale-[0.98]"
+            >
+              Sign In
+            </button>
+          </form>
+
+          {/* Footer */}
+          <div className="mt-8 text-center">
+            <p className={`${darkMode ? "text-slate-500" : "text-slate-400"} text-xs`}>
+              © {new Date().getFullYear()} Keian Camposano Gacillos
+            </p>
+          </div>
         </div>
-
-        {error && (
-          <div className="p-3 mb-4 text-sm text-red-600 bg-red-100 rounded-lg">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block mb-1 text-sm font-medium text-violet-600">
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              className="px-4 py-3 w-full text-white rounded-xl border border-violet-600 bg-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-600"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1 text-sm font-medium text-violet-600">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              className="px-4 py-3 w-full text-white rounded-xl border border-violet-600 bg-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-600"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="py-3 w-full font-semibold text-white bg-violet-600 rounded-xl transition hover:bg-violet-700 active:scale-95"
-          >
-            Sign In
-          </button>
-        </form>
       </div>
     </div>
   )

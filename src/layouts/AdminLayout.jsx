@@ -88,7 +88,7 @@ export default function AdminLayout() {
         `}
       >
         <div className="px-6 py-5 text-xl font-semibold tracking-wide">
-          Admin Panel
+        Admin Panel
         </div>
 
         <nav className="px-3 space-y-1">
