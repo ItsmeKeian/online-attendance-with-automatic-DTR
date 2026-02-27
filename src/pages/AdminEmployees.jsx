@@ -36,7 +36,7 @@ export default function AdminEmployees() {
       if (search.trim()) params.append("search", search.trim())
 
       const res = await fetch(
-        `http://localhost/online-dtr-api/admin/employees.php?${params}`
+        `/smartdtr-api/admin/employees.php?${params}`
       )
 
       const json = await res.json()
@@ -86,7 +86,7 @@ export default function AdminEmployees() {
 
     if (!result.isConfirmed) return
 
-    await fetch("http://localhost/online-dtr-api/admin/delete_employee.php", {
+    await fetch("/smartdtr-api/admin/delete_employee.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: emp.id }),
@@ -121,7 +121,7 @@ export default function AdminEmployees() {
     if (department) params.append("department", department)
     if (search.trim()) params.append("search", search.trim())
 
-    const url = `http://localhost/online-dtr-api/admin/export_employees.php?${params}`
+    const url = `/smartdtr-api/admin/export_employees.php?${params}`
 
     const link = document.createElement("a")
     link.href = url

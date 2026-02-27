@@ -51,25 +51,25 @@ export default function AdminDashboard() {
     : "rgba(0,0,0,0.12)"
 
   useEffect(() => {
-    fetch("http://localhost/online-dtr-api/admin/dashboard_stats.php")
+    fetch("/smartdtr-api/admin/dashboard_stats.php")
       .then(res => res.json())
       .then(data => setStats(data))
   }, [])
 
   useEffect(() => {
-    fetch("http://localhost/online-dtr-api/admin/dashboard_chart.php")
+    fetch("/smartdtr-api/admin/dashboard_chart.php")
       .then(res => res.json())
       .then(data => setChartData(data))
   }, [])
 
   useEffect(() => {
-    fetch("http://localhost/online-dtr-api/admin/dashboard_department_chart.php")
+    fetch("/smartdtr-api/admin/dashboard_department_chart.php")
       .then(res => res.json())
       .then(data => setDeptData(data))
   }, [])
 
   useEffect(() => {
-    fetch("http://localhost/online-dtr-api/admin/dashboard_monthly_chart.php")
+    fetch("/smartdtr-api/admin/dashboard_monthly_chart.php")
       .then(res => res.json())
       .then(data => setMonthlyData(data))
   }, [])

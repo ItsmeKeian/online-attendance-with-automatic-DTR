@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
+
 export default function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -29,7 +30,7 @@ export default function Login() {
     setError("")
 
     try {
-      const res = await fetch("http://localhost/online-dtr-api/auth/login.php", {
+      const res = await fetch("/smartdtr-api/auth/login.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -40,7 +41,7 @@ export default function Login() {
       if (!res.ok) {
         setError(data.error || "Login failed")
         return
-      }
+      }``
 
       if (data.user.role !== "admin") {
         setError("Unauthorized access")
@@ -50,7 +51,7 @@ export default function Login() {
       localStorage.setItem("user", JSON.stringify(data.user))
       localStorage.setItem("role", "admin")
 
-      window.location.href = "/admin"
+      navigate("/admin")
     } catch {
       setError("Server error. Please try again.")
     }
@@ -126,13 +127,13 @@ export default function Login() {
                   darkMode ? "text-slate-200" : "text-slate-700"
                 }`}
               >
-                Email Address
+                Username
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="admin@email.com"
+                placeholder="Enter username"
                 className={`px-4 py-3 w-full rounded-xl border focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors duration-300
                   ${
                     darkMode

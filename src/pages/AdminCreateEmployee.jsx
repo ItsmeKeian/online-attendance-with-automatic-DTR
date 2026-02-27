@@ -36,7 +36,7 @@ export default function AdminCreateEmployee({ isOpen, onClose, onSuccess }) {
 
     try {
       const res = await fetch(
-        "http://localhost/online-dtr-api/admin/create_employee.php",
+        "/smartdtr-api/admin/create_employee.php",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

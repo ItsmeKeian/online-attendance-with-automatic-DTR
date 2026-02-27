@@ -35,7 +35,7 @@ export default function EmployeeKiosk() {
 
     try {
       const res = await fetch(
-        "http://localhost/online-dtr-api/employees/get_employee.php",
+        "/smartdtr-api/employees/get_employee.php",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -65,7 +65,7 @@ export default function EmployeeKiosk() {
 
     try {
       const res = await fetch(
-        "http://localhost/online-dtr-api/attendance/status.php",
+        "/smartdtr-api/attendance/status.php",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -104,7 +104,7 @@ export default function EmployeeKiosk() {
 
     try {
       const res = await fetch(
-        `http://localhost/online-dtr-api/attendance/${action}.php`,
+        `/smartdtr-api/attendance/${action}.php`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

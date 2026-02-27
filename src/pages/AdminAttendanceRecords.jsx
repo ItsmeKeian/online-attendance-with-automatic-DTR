@@ -48,9 +48,7 @@ export default function AdminAttendanceRecords() {
     if (department) params.append("department", department)
     if (employeeId) params.append("employee_id", employeeId)
 
-    fetch(
-      `http://localhost/online-dtr-api/admin/attendance_records.php?${params}`
-    )
+      fetch(`${import.meta.env.VITE_API_URL}/admin/attendance_records.php?${params}`)
       .then(res => res.json())
       .then(data => {
         setRecords(Array.isArray(data) ? data : [])
@@ -70,9 +68,7 @@ export default function AdminAttendanceRecords() {
     }
     if (department) params.append("department", department)
 
-    fetch(
-      `http://localhost/online-dtr-api/admin/attendance_employees.php?${params}`
-    )
+      fetch(`${import.meta.env.VITE_API_URL}/admin/attendance_employees.php?${params}`)
       .then(res => res.json())
       .then(data => setEmployees(Array.isArray(data) ? data : []))
   }, [fromDate, toDate, department])
