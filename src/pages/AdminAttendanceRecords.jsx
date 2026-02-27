@@ -479,7 +479,17 @@ export default function AdminAttendanceRecords() {
             </div>
 
             <button
-              onClick={() => setSelectedRecord(row)}
+              onClick={async () => {
+                try {
+                  const res = await fetch(
+                    `${import.meta.env.VITE_API_URL}/admin/attendance_record_view.php?id=${row.id}`
+                  )
+                  const data = await res.json()
+                  setSelectedRecord(data)
+                } catch {
+                  alert("Failed to load record details")
+                }
+              }}
               className="px-3 py-2 mt-4 w-full text-sm text-white bg-purple-600 rounded-lg hover:bg-purple-700"
             >
               View Details
@@ -535,7 +545,27 @@ export default function AdminAttendanceRecords() {
 
                   <td className="p-3">
                     <button
-                      onClick={() => setSelectedRecord(row)}
+                     onClick={async () => {
+                      try {
+                        setSelectedRecord(null)
+                    
+                        const res = await fetch(
+                          `${import.meta.env.VITE_API_URL}/admin/attendance_record_view.php?id=${row.id}`
+                        )
+                    
+                        const data = await res.json()
+                    
+                        if (!res.ok) {
+                          alert("Failed to load record")
+                          return
+                        }
+                    
+                        setSelectedRecord(data)
+                    
+                      } catch {
+                        alert("Failed to load record details")
+                      }
+                    }}
                       className="px-3 py-1 text-xs text-white bg-purple-600 rounded-md hover:bg-purple-700"
                     >
                       View
